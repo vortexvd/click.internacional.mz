@@ -1,0 +1,342 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { 
+  CheckCircle2, 
+  MessageCircle, 
+  X,
+  Globe,
+  CreditCard,
+  TrendingUp,
+  AlertTriangle,
+  Clock,
+  ChevronRight,
+  MousePointer2,
+  ShieldCheck,
+  ArrowRight,
+  Target,
+  Rocket,
+  Briefcase,
+  Zap,
+  Star
+} from 'lucide-react';
+
+const App = () => {
+  const [isChatOpen, setIsChatOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [timeLeft, setTimeLeft] = useState(600); 
+  const [notification, setNotification] = useState(null);
+  const chatEndRef = useRef(null);
+
+  const whatsappNumber = "244957408593";
+  const whatsappLink = `https://wa.me/${whatsappNumber}`;
+
+  useEffect(() => {
+    if (timeLeft <= 0) return;
+    const timer = setInterval(() => setTimeLeft(prev => prev - 1), 1000);
+    return () => clearInterval(timer);
+  }, [timeLeft]);
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  useEffect(() => {
+    const packagesNames = ["Start Internacional", "Pro Digital", "Master Vendas"];
+    const cities = ["Maputo", "Matola", "Beira", "Nampula", "Tete", "Quelimane"];
+    
+    const showNotification = () => {
+      const randomPkg = packagesNames[Math.floor(Math.random() * packagesNames.length)];
+      const randomCity = cities[Math.floor(Math.random() * cities.length)];
+      setNotification({ pkg: randomPkg, city: randomCity });
+      setTimeout(() => setNotification(null), 5000);
+    };
+
+    const interval = setInterval(showNotification, 12000);
+    setTimeout(showNotification, 2000);
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    const handleScroll = () => setIsScrolled(window.scrollY > 50);
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const addMessage = (sender, text, options = null) => {
+    setMessages(prev => [...prev, { sender, text, options }]);
+  };
+
+  useEffect(() => {
+    if (isChatOpen && messages.length === 0) {
+      setTimeout(() => {
+        addMessage("bot", "🔥 Olá! O mercado global não espera. Qual o seu objetivo hoje?");
+        setTimeout(() => {
+          addMessage("bot", "Escolha um pacote para começar:", [
+            { id: "p1", label: "Pacote 1 – Start" },
+            { id: "p2", label: "Pacote 2 – Pro" },
+            { id: "p3", label: "Pacote 3 – Master" }
+          ]);
+        }, 800);
+      }, 500);
+    }
+  }, [isChatOpen]);
+
+  const handleUserChoice = (id, label) => {
+    addMessage("user", label);
+    setTimeout(() => {
+      addMessage("bot", "Excelente! Nossos consultores estão prontos para ativar seu acesso agora.", [
+        { id: "wa", label: "Finalizar no WhatsApp" }
+      ]);
+    }, 600);
+  };
+
+  const packages = [
+    {
+      title: "Start Internacional",
+      tag: "🎯 Essencial",
+      price: "1.300 MZN",
+      ideal: "Ideal para: receber e enviar dinheiro via pix e para vender online.",
+      items: ["CPF brasileiro", "RG digital", "Conta bancária no Brasil (PIX)", "Suporte 1 a 7"],
+      icon: <Target size={24} />,
+      color: "from-blue-500 to-indigo-600",
+      featured: false
+    },
+    {
+      title: "Pro Digital",
+      tag: "🚀 Mais Vendido",
+      price: "2.500 MZN",
+      ideal: "Ideal para: criadores de conteúdo, afiliados, freelancers e revendedores.",
+      items: ["Número virtual (10 países)", "Social Mídia", "Mentoria de posicionamento", "Grupo de acompanhamento", "Suporte técnico 14 dias"],
+      icon: <Rocket size={24} />,
+      color: "from-indigo-600 to-purple-700",
+      featured: true
+    },
+    {
+      title: "Master Vendas",
+      tag: "💼 Elite Business",
+      price: "3.000 MZN",
+      ideal: "Ideal para: Empresas e profissionais que buscam escala máxima.",
+      items: ["Site profissional", "Página de vendas", "Mentoria estratégica", "Tráfego Pago", "Gestão de Redes Sociais", "Suporte até 30 dias"],
+      icon: <Briefcase size={24} />,
+      color: "from-slate-800 to-black",
+      featured: false
+    }
+  ];
+
+  return (
+    <div className="min-h-screen bg-[#f0f4f8] text-slate-900 font-sans selection:bg-yellow-200 overflow-x-hidden">
+      
+      {/* Barra de Urgência Vermelha Neon - Otimizada para Mobile */}
+      <div className="bg-gradient-to-r from-red-600 via-red-500 to-red-600 text-white py-2 px-4 text-center text-[10px] sm:text-[12px] font-black tracking-widest sticky top-0 z-[100] flex justify-center items-center gap-2 sm:gap-4 shadow-lg border-b border-red-400/30">
+        <Zap size={14} className="animate-pulse fill-yellow-300 text-yellow-300 shrink-0" />
+        <span className="uppercase italic truncate">OFERTA EXPIRA EM: {formatTime(timeLeft)}</span>
+        <Zap size={14} className="animate-pulse fill-yellow-300 text-yellow-300 shrink-0" />
+      </div>
+
+      {/* Header Estilo Apple Glass - Altura reduzida no Mobile */}
+      <header className={`fixed top-10 sm:top-12 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/90 backdrop-blur-xl py-2 sm:py-3 shadow-lg' : 'bg-transparent py-4 sm:py-6'}`}>
+        <div className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
+          <div className="flex items-center gap-2 sm:gap-3 group cursor-pointer">
+            <div className="w-10 h-10 sm:w-12 sm:h-12 bg-gradient-to-tr from-blue-600 to-indigo-600 rounded-xl sm:rounded-2xl flex items-center justify-center shadow-xl">
+              <MousePointer2 className="text-white fill-white" size={20} sm:size={24} />
+            </div>
+            <div className="flex flex-col leading-none">
+              <span className="text-lg sm:text-2xl font-black italic tracking-tighter">Click<span className="text-blue-600">Intl</span></span>
+              <span className="text-[8px] font-black text-blue-500 uppercase tracking-widest">Premium MZ</span>
+            </div>
+          </div>
+          
+          <button onClick={() => window.open(whatsappLink, '_blank')} className="bg-blue-600 text-white px-4 sm:px-8 py-2 sm:py-3 rounded-xl sm:rounded-2xl font-black text-[10px] sm:text-[11px] uppercase tracking-widest shadow-lg shadow-blue-600/30 flex items-center gap-2">
+            Iniciar <span className="hidden sm:inline">Agora</span> <ArrowRight size={14} />
+          </button>
+        </div>
+      </header>
+
+      {/* Hero Section - Letras Ajustadas para Mobile */}
+      <section className="relative pt-32 sm:pt-60 pb-16 sm:pb-32 px-4 sm:px-6 overflow-hidden">
+        <div className="absolute top-0 left-0 w-full h-full bg-gradient-to-br from-blue-100/40 via-white to-purple-100/30 -z-10"></div>
+        
+        <div className="container mx-auto flex flex-col lg:flex-row items-center gap-12 sm:gap-16 relative">
+          <div className="lg:w-3/5 text-center lg:text-left">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-full text-[9px] sm:text-[11px] font-black uppercase tracking-widest mb-6 sm:mb-10 shadow-xl">
+               <Star size={14} className="fill-yellow-400 text-yellow-400" /> Líder em Moçambique 2024
+            </div>
+            {/* TAMANHO DE LETRA AJUSTADO AQUI */}
+            <h1 className="text-4xl sm:text-6xl md:text-8xl font-black text-slate-900 leading-[1] mb-6 sm:mb-10 tracking-tighter italic uppercase">
+              O Mundo <br/> Na Sua <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-indigo-600">Mão.</span>
+            </h1>
+            <p className="text-base sm:text-xl text-slate-600 mb-8 sm:mb-12 max-w-xl leading-relaxed font-bold px-4 sm:px-0">
+              Não seja limitado pela geografia. Ativamos sua presença global com contas bancárias, sites e mentoria de elite.
+            </p>
+            <div className="flex flex-col sm:flex-row items-center gap-4 sm:gap-6 w-full max-w-md mx-auto lg:mx-0">
+              <button onClick={() => setIsChatOpen(true)} className="w-full sm:w-auto bg-slate-900 text-white px-8 sm:px-12 py-4 sm:py-6 rounded-2xl sm:rounded-3xl font-black text-xs sm:text-sm uppercase tracking-[0.2em] shadow-2xl flex items-center justify-center gap-4">
+                Ver Pacotes <ChevronRight size={18} />
+              </button>
+              <div className="flex items-center gap-3">
+                 <div className="flex -space-x-3">
+                   {[1,2,3].map(i => <div key={i} className="w-8 h-8 sm:w-10 sm:h-10 rounded-full border-2 border-white bg-blue-100 shadow-lg" />)}
+                 </div>
+                 <span className="text-[10px] font-black text-blue-600 uppercase tracking-widest">+2.4k Membros</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Card Visual - Escondido ou reduzido no mobile para focar no texto */}
+          <div className="lg:w-2/5 w-full max-w-sm mx-auto">
+            <div className="relative group">
+              <div className="absolute -inset-1 bg-gradient-to-r from-blue-600 to-purple-600 rounded-[2.5rem] sm:rounded-[3.5rem] blur opacity-25"></div>
+              <div className="relative bg-white rounded-[2.2rem] sm:rounded-[3rem] p-3 sm:p-4 shadow-2xl border border-blue-50">
+                 <div className="bg-slate-900 rounded-[1.8rem] sm:rounded-[2.5rem] p-6 sm:p-10 text-white overflow-hidden relative">
+                    <div className="flex justify-between items-start mb-12 sm:mb-20">
+                      <Zap size={32} className="text-yellow-400 fill-yellow-400" />
+                      <div className="text-right">
+                        <p className="text-[8px] font-black text-slate-400 uppercase tracking-widest">Acesso VIP</p>
+                        <p className="text-base sm:text-xl font-black italic">Click Intl</p>
+                      </div>
+                    </div>
+                    <div>
+                      <p className="text-[10px] font-bold text-blue-400 mb-1 uppercase tracking-[0.2em]">Status da Conta</p>
+                      <p className="text-2xl sm:text-4xl font-black italic uppercase">Verificada</p>
+                    </div>
+                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Pacotes - Ajustados para Grid Mobile Único */}
+      <section id="pacotes" className="py-20 sm:py-32 px-4 sm:px-6 bg-white relative">
+        <div className="container mx-auto">
+          <div className="text-center mb-16 sm:mb-24">
+            <h2 className="text-3xl sm:text-5xl font-black text-slate-900 mb-4 sm:mb-6 tracking-tighter italic uppercase">
+              Escolha seu <span className="text-blue-600">Sucesso</span>
+            </h2>
+            <p className="text-slate-400 font-black uppercase text-[10px] sm:text-[12px] tracking-[0.3em]">Resultados Reais. Sem Desculpas.</p>
+          </div>
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 sm:gap-10 max-w-7xl mx-auto">
+            {packages.map((pkg, idx) => (
+              <div key={idx} className={`group relative p-1 rounded-[2.5rem] sm:rounded-[3rem] transition-all duration-500 ${pkg.featured ? 'bg-gradient-to-b from-blue-500 to-purple-700 shadow-2xl lg:scale-105 z-10' : 'bg-slate-100 shadow-xl'}`}>
+                <div className="bg-white rounded-[2.3rem] sm:rounded-[2.8rem] h-full p-6 sm:p-10 flex flex-col">
+                  {pkg.featured && (
+                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-yellow-400 text-slate-900 px-6 py-2 rounded-full text-[9px] font-black uppercase tracking-widest shadow-xl border-2 border-white">
+                      ⭐ Recomendado
+                    </div>
+                  )}
+                  
+                  <div className={`w-12 h-12 sm:w-16 sm:h-16 rounded-xl sm:rounded-2xl bg-gradient-to-br ${pkg.color} flex items-center justify-center text-white shadow-lg mb-6 sm:mb-8`}>
+                    {pkg.icon}
+                  </div>
+                  
+                  <span className="text-[9px] font-black text-blue-500 uppercase tracking-widest mb-1">{pkg.tag}</span>
+                  <h3 className="text-xl sm:text-3xl font-black text-slate-900 mb-3 italic tracking-tighter">{pkg.title}</h3>
+                  
+                  <div className="bg-slate-50 p-3 sm:p-4 rounded-xl sm:rounded-2xl border border-slate-100 mb-6 sm:mb-8">
+                    <p className="text-[11px] sm:text-[12px] font-bold text-slate-500 leading-relaxed italic">{pkg.ideal}</p>
+                  </div>
+
+                  <div className="mb-6 sm:mb-10">
+                    <p className="text-3xl sm:text-5xl font-black text-slate-900 italic tracking-tighter">{pkg.price}</p>
+                    <div className="h-1 w-10 bg-blue-600 mt-2 rounded-full"></div>
+                  </div>
+
+                  <div className="space-y-3 sm:space-y-4 mb-8 sm:mb-12 flex-grow">
+                    {pkg.items.map((item, i) => (
+                      <div key={i} className="flex items-center gap-3 text-xs sm:text-sm font-bold text-slate-700">
+                        <CheckCircle2 size={16} className="text-green-600 shrink-0" />
+                        {item}
+                      </div>
+                    ))}
+                  </div>
+
+                  <button 
+                    onClick={() => setIsChatOpen(true)}
+                    className={`w-full py-4 sm:py-6 rounded-xl sm:rounded-[1.5rem] font-black text-[10px] sm:text-xs uppercase tracking-[0.2em] transition-all text-white shadow-xl flex items-center justify-center gap-2 bg-gradient-to-r ${pkg.color}`}
+                  >
+                    Activar Agora <Zap size={14} className="fill-yellow-300" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Footer Ajustado */}
+      <footer className="py-16 sm:py-24 bg-slate-900 text-white">
+        <div className="container mx-auto px-6 text-center">
+          <div className="flex items-center justify-center gap-2 mb-8">
+            <MousePointer2 className="fill-blue-500 text-blue-500" size={20} />
+            <span className="text-xl font-black italic tracking-tighter">Click<span className="text-blue-600">Internacional</span></span>
+          </div>
+          <p className="text-[9px] font-bold tracking-[0.5em] text-slate-600 uppercase">© 2024 Moçambique</p>
+        </div>
+      </footer>
+
+      {/* Notificação Mobile - Reduzida e Ajustada */}
+      {notification && (
+        <div className="fixed bottom-24 sm:bottom-32 left-4 sm:left-8 z-[120] bg-white border-l-4 border-green-500 p-3 sm:p-5 rounded-xl sm:rounded-2xl shadow-2xl flex items-center gap-3 sm:gap-4 animate-in slide-in-from-left-20 duration-500 max-w-[280px] sm:max-w-[320px]">
+          <div className="w-10 h-10 sm:w-12 sm:h-12 bg-green-500 text-white rounded-lg sm:rounded-xl flex items-center justify-center shrink-0">
+             <Star size={20} sm:size={24} className="fill-white" />
+          </div>
+          <div className="text-left overflow-hidden">
+             <p className="text-[9px] font-black text-green-600 uppercase mb-0.5">Venda Confirmada!</p>
+             <p className="text-xs font-black text-slate-900 truncate">{notification.pkg}</p>
+             <p className="text-[9px] font-bold text-slate-400 italic">Cliente em {notification.city}</p>
+          </div>
+        </div>
+      )}
+
+      {/* Chat Bot - Tamanho de toque aumentado */}
+      <button onClick={() => setIsChatOpen(!isChatOpen)} className="fixed bottom-6 right-6 z-[110] bg-gradient-to-tr from-blue-600 to-indigo-600 text-white p-4 sm:p-5 rounded-2xl shadow-2xl transition-all">
+        {isChatOpen ? <X size={24} /> : (
+          <div className="relative">
+             <div className="absolute -top-10 -left-20 bg-white text-[8px] font-black px-3 py-1.5 rounded-lg text-blue-600 shadow-xl border border-blue-50 whitespace-nowrap">SUPORTE ONLINE 🔥</div>
+             <MessageCircle size={24} />
+          </div>
+        )}
+      </button>
+
+      {isChatOpen && (
+        <div className="fixed inset-0 sm:inset-auto sm:bottom-24 sm:right-6 z-[130] sm:w-[380px] sm:h-[550px] bg-white sm:rounded-[2.5rem] flex flex-col overflow-hidden animate-in fade-in zoom-in-95">
+          <div className="p-6 bg-gradient-to-br from-blue-600 to-indigo-700 text-white flex items-center justify-between">
+            <div className="flex items-center gap-4">
+              <div className="w-10 h-10 bg-white/20 rounded-xl flex items-center justify-center font-black">C</div>
+              <div>
+                <p className="text-[9px] font-black uppercase text-blue-200">Suporte Express</p>
+                <p className="text-lg font-black italic">Click Internacional</p>
+              </div>
+            </div>
+            <button onClick={() => setIsChatOpen(false)} className="sm:hidden p-2">
+              <X size={24} />
+            </button>
+          </div>
+          
+          <div className="flex-grow p-4 sm:p-6 overflow-y-auto space-y-4 bg-blue-50/20">
+            {messages.map((m, i) => (
+              <div key={i} className={`flex ${m.sender === 'user' ? 'justify-end' : 'justify-start'}`}>
+                <div className={`max-w-[85%] p-4 rounded-2xl text-[12px] font-bold ${m.sender === 'user' ? 'bg-blue-600 text-white rounded-tr-none' : 'bg-white text-slate-800 border border-blue-100 rounded-tl-none'}`}>
+                  {m.text}
+                </div>
+              </div>
+            ))}
+            
+            {messages[messages.length - 1]?.options && (
+              <div className="grid grid-cols-1 gap-2 pt-2">
+                {messages[messages.length - 1].options.map((opt) => (
+                  <button key={opt.id} onClick={() => handleUserChoice(opt.id, opt.label)} className="text-left p-4 text-[10px] font-black bg-white border border-slate-200 text-slate-900 rounded-xl uppercase tracking-widest hover:border-blue-600 transition-all shadow-sm">{opt.label}</button>
+                ))}
+              </div>
+            )}
+            <div ref={chatEndRef} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default App;
